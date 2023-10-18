@@ -1,4 +1,4 @@
-package should_return_translation
+package tests
 
 import (
 	"testing"
@@ -6,19 +6,16 @@ import (
 	"github.com/EugeneGpil/translator/app/modules/Translate/tests/base"
 )
 
-var lang = "testLang"
-var key = "testKey"
-var expectedTranslation = "testTranslation"
+func Test_should_return_translation_if_no_languages_set_at_all(t *testing.T) {
+	key := "testKey"
+	expectedTranslation := "testTranslation"
 
-func Test_should_return_translation(t *testing.T) {
 	base.AssertTranslation(base.AssertTranslationDto{
 		Translations: map[string]map[string]string{
-			lang: {
+			"en": {
 				key: expectedTranslation,
 			},
 		},
-		Lang:                lang,
-		FallbackLang:        "SomeLang",
 		Key:                 key,
 		ExpectedTranslation: expectedTranslation,
 		T:                   t,

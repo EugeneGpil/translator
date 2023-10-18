@@ -19,8 +19,14 @@ type AssertTranslationDto struct {
 func AssertTranslation(dto AssertTranslationDto) {
 	tester.SetTester(dto.T)
 
-	translator.SetLang(dto.Lang)
-	translator.SetFallbackLang(dto.FallbackLang)
+	if dto.Lang != "" {
+		translator.SetLang(dto.Lang)
+	}
+
+	if dto.FallbackLang != "" {
+		translator.SetFallbackLang(dto.FallbackLang)
+	}
+
 	translator.SetTranslations(dto.Translations)
 
 	translation := translator.Translate(dto.Key)
