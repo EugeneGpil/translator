@@ -6,17 +6,25 @@ func Translate(
 	fallbackLang string,
 	key string,
 ) string {
-	langTranslations, isset := translations[lang]
-	if isset {
-		keyTranslation, isset := langTranslations[key]
-		if isset {
-			return keyTranslation
-		}
-
-		return getFallbackTranslation(translations, fallbackLang, key)
+	if translation := getTranslation(translations, lang, key); translation != "" {
+		return translation
 	}
 
 	return getFallbackTranslation(translations, fallbackLang, key)
+}
+
+func getTranslation(
+	translations map[string]map[string]string,
+	lang string,
+	key string,
+) string {
+	if langTranslations, isset := translations[lang]; isset {
+		if keyTranslation, isset := langTranslations[key]; isset {
+			return keyTranslation
+		}
+	}
+
+	return "";
 }
 
 func getFallbackTranslation(
@@ -24,12 +32,8 @@ func getFallbackTranslation(
 	fallbackLang string,
 	key string,
 ) string {
-	fallbackTranslations, isset := translations[fallbackLang]
-	if isset {
-		keyTranslation, isset := fallbackTranslations[key]
-		if isset {
-			return keyTranslation
-		}
+	if translation := getTranslation(translations, fallbackLang, key); translation != "" {
+		return translation
 	}
 
 	return key

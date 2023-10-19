@@ -11,12 +11,14 @@ func Test_should_return_translation(t *testing.T) {
 	key := "testKey"
 	expectedTranslation := "testTranslation"
 
-	base.AssertTranslation(base.AssertTranslationDto{
-		Translations: map[string]map[string]string{
-			lang: {
-				key: expectedTranslation,
-			},
+	translations := map[string]map[string]string{
+		lang: {
+			key: expectedTranslation,
 		},
+	}
+
+	base.AssertTranslation(base.AssertTranslationDto{
+		Translations:        translations,
 		Lang:                lang,
 		FallbackLang:        "SomeLang",
 		Key:                 key,

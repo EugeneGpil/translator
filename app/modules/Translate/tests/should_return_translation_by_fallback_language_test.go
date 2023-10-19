@@ -6,8 +6,9 @@ import (
 	"github.com/EugeneGpil/translator/app/modules/Translate/tests/base"
 )
 
-func Test_should_return_translation_if_no_languages_set_at_all(t *testing.T) {
+func Test_should_return_translation_by_fallback_language(t *testing.T) {
 	key := "testKey"
+	fallbackLanguage := "fallbackLanguage"
 	expectedTranslation := "testTranslation"
 
 	translations := map[string]map[string]string{
@@ -19,6 +20,7 @@ func Test_should_return_translation_if_no_languages_set_at_all(t *testing.T) {
 	base.AssertTranslation(base.AssertTranslationDto{
 		Translations:        translations,
 		Key:                 key,
+		FallbackLang:        fallbackLanguage,
 		ExpectedTranslation: expectedTranslation,
 		T:                   t,
 	})
