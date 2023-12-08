@@ -20,6 +20,14 @@ func SetTranslations(translationsToSet map[string]map[string]string) {
 	translations = translationsToSet
 }
 
+// func Translate(key string, placeholders map[string]string) string {
 func Translate(key string) string {
-	return TranslateModule.Translate(translations, lang, fallbackLang, key)
+	return TranslateModule.
+		New().
+		SetTranslations(translations).
+		SetLang(lang).
+		SetFallbackLang(fallbackLang).
+		SetKey(key).
+		// SetPlaceholders(placeholders).
+		Run()
 }
