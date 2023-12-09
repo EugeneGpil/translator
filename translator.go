@@ -1,33 +1,73 @@
 package translator
 
-import (
-	TranslateModule "github.com/EugeneGpil/translator/app/modules/Translate"
-)
+var defaultFallbackLang = "en";
 
-var lang = "en"
-var fallbackLang = "en"
-var translations map[string]map[string]string
-
-func SetLang(langToSet string) {
-	lang = langToSet
+type Translator struct {
+	translations map[string]map[string]string
+	lang         string
+	fallbackLang string
+	key          string
+	placeholders map[string]string
 }
 
-func SetFallbackLang(langToSet string) {
-	fallbackLang = langToSet
+func New() Translator {
+	return Translator{
+		fallbackLang: defaultFallbackLang,
+	}
 }
 
-func SetTranslations(translationsToSet map[string]map[string]string) {
-	translations = translationsToSet
+func (translator *Translator) SetTranslations(translations map[string]map[string]string) *Translator {
+	translator.translations = translations
+
+	return translator
 }
 
-// func Translate(key string, placeholders map[string]string) string {
-func Translate(key string) string {
-	return TranslateModule.
-		New().
-		SetTranslations(translations).
-		SetLang(lang).
-		SetFallbackLang(fallbackLang).
-		SetKey(key).
-		// SetPlaceholders(placeholders).
-		Run()
+func (translator *Translator) SetLang(lang string) *Translator {
+	translator.lang = lang
+
+	return translator
+}
+
+func (translator *Translator) SetFallbackLang(fallbackLang string) *Translator {
+	translator.fallbackLang = fallbackLang
+
+	return translator
+}
+
+func (translator *Translator) SetKey(key string) *Translator {
+	translator.key = key
+
+	return translator
+}
+
+func (translator *Translator) SetPlaceholders(placeholders map[string]string) *Translator {
+	translator.placeholders = placeholders
+
+	return translator
+}
+
+func (translator Translator) Run() string {
+	if translation := translator.getTranslation(translator.lang); translation != "" {
+		return translation
+	}
+
+	return translator.getFallbackTranslation()
+}
+
+func (translator Translator) getTranslation(lang string) string {
+	if langTranslations, isset := translator.translations[lang]; isset {
+		if keyTranslation, isset := langTranslations[translator.key]; isset {
+			return keyTranslation
+		}
+	}
+
+	return ""
+}
+
+func (translator Translator) getFallbackTranslation() string {
+	if translation := translator.getTranslation(translator.fallbackLang); translation != "" {
+		return translation
+	}
+
+	return translator.key
 }

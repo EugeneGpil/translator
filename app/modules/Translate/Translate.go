@@ -43,15 +43,15 @@ func (translator Translator) SetPlaceholders(placeholders map[string]string) Tra
 }
 
 func (translator Translator) Run() string {
-	if translation := translator.getTranslation(); translation != "" {
+	if translation := translator.getTranslation(translator.lang); translation != "" {
 		return translation
 	}
 
 	return translator.getFallbackTranslation()
 }
 
-func (translator Translator) getTranslation() string {
-	if langTranslations, isset := translator.translations[translator.lang]; isset {
+func (translator Translator) getTranslation(lang string) string {
+	if langTranslations, isset := translator.translations[lang]; isset {
 		if keyTranslation, isset := langTranslations[translator.key]; isset {
 			return keyTranslation
 		}
@@ -61,7 +61,7 @@ func (translator Translator) getTranslation() string {
 }
 
 func (translator Translator) getFallbackTranslation() string {
-	if translation := translator.getTranslation(); translation != "" {
+	if translation := translator.getTranslation(translator.fallbackLang); translation != "" {
 		return translation
 	}
 

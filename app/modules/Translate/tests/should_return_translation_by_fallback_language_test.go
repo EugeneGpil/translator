@@ -12,7 +12,7 @@ func Test_should_return_translation_by_fallback_language(t *testing.T) {
 	expectedTranslation := "testTranslation"
 
 	translations := map[string]map[string]string{
-		"en": {
+		fallbackLanguage: {
 			key: expectedTranslation,
 		},
 	}
