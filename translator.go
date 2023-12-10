@@ -1,5 +1,7 @@
 package translator
 
+import "github.com/EugeneGpil/translator/app/modules/PlaceholdersApplier"
+
 var defaultFallbackLang = "en";
 
 type Translator struct {
@@ -47,14 +49,25 @@ func (translator *Translator) SetPlaceholders(placeholders map[string]string) *T
 }
 
 func (translator Translator) Run() string {
-	if translation := translator.getTranslation(translator.lang); translation != "" {
+	translation := translator.getTranslation()
+
+	placeholdersApplier := PlaceholdersApplier.New()
+
+	return placeholdersApplier.
+		SetPlaceholders(translator.placeholders).
+		SetTranslation(translation).
+		Run()
+}
+
+func (translator Translator) getTranslation() string {
+	if translation := translator.getTranslationByLang(translator.lang); translation != "" {
 		return translation
 	}
 
 	return translator.getFallbackTranslation()
 }
 
-func (translator Translator) getTranslation(lang string) string {
+func (translator Translator) getTranslationByLang(lang string) string {
 	if langTranslations, isset := translator.translations[lang]; isset {
 		if keyTranslation, isset := langTranslations[translator.key]; isset {
 			return keyTranslation
@@ -65,7 +78,7 @@ func (translator Translator) getTranslation(lang string) string {
 }
 
 func (translator Translator) getFallbackTranslation() string {
-	if translation := translator.getTranslation(translator.fallbackLang); translation != "" {
+	if translation := translator.getTranslationByLang(translator.fallbackLang); translation != "" {
 		return translation
 	}
 
